@@ -1,19 +1,10 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "builds": [
-    {
-      "src": "api/**/*.py",
-      "use": "@vercel/python"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "/api/main.py"
-    }
+  "rewrites": [
+    { "source": "/(.*)", "destination": "main.py" }
   ],
   "functions": {
-    "api/**/*.py": {
+    "main.py": {
       "excludeFiles": "{screen.png,.git/**,README*,LICENSE,AGENTS.md,DESIGN.md,.venv/**}"
     }
   }
