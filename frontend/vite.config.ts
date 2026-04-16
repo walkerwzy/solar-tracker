@@ -34,7 +34,7 @@ export default defineConfig(({mode}) => {
       },
     },
     build: {
-      outDir: '../api/static',
+      outDir: 'dist',
       emptyOutDir: true,
       sourcemap: false,
     },

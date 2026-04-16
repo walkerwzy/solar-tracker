@@ -46,7 +46,7 @@ npm run dev
 cd frontend
 npm run build
 
-# 运行后端（从 api/static 提供静态文件）
+# 运行后端（从 frontend/dist 提供静态文件）
 cd ../api
 python -m uvicorn main:app --port 8000
 ```

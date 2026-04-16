@@ -26,7 +26,7 @@ config = {
 
 TZ = pytz.timezone(config["timezone"])
 
-static_path = os.path.join(os.path.dirname(__file__), "static")
+static_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "frontend", "dist")
 if os.path.exists(static_path):
     app.mount("/static", StaticFiles(directory=static_path), name="static")
 

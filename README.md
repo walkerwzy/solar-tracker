@@ -46,7 +46,7 @@ Open http://localhost:3000 - frontend proxies API requests to backend.
 cd frontend
 npm run build
 
-# Run backend (serves static from api/static)
+# Run API (serves frontend from frontend/dist)
 cd ../api
 python -m uvicorn main:app --port 8000
 ```
