@@ -55,7 +55,7 @@ export const TelemetryPanel: React.FC<TelemetryPanelProps> = ({
         <span className="text-[10px] text-primary font-mono bg-primary/10 px-2 py-0.5 rounded border border-primary/20">STABLE</span>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-6">
+      <div className="grid grid-cols-2 lg:grid-cols-1 gap-4 lg:gap-6">
         {/* Temporal Reference */}
         <div className="bg-white/5 p-4 md:p-6 rounded-[24px] border border-white/10">
           <div className="flex items-center justify-between mb-3">
