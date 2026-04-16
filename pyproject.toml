@@ -1,0 +1,25 @@
+[project]
+name = "solar-reflector-tracker"
+version = "0.1.0"
+description = "一个基于 FastAPI 的太阳位置追踪与反射镜控制系统"
+authors = [
+    {name = "Your Name", email = "you@example.com"}
+]
+dependencies = [
+    "fastapi>=0.100.0",
+    "uvicorn[standard]>=0.20.0",
+    "pysolar>=0.11",
+    "pyserial>=3.5",
+    "pytz>=2023.3",
+]
+requires-python = ">=3.9"
+
+[tool.setuptools]
+py-modules = ["main", "tracker_logic"]
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.uv]
+# 如果你使用 uv，可以在这里进行特定配置
