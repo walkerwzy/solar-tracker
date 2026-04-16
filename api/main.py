@@ -1,6 +1,6 @@
 from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse
-from tracker_logic import SolarReflector
+from .tracker_logic import SolarReflector
 import datetime
 import pytz
 

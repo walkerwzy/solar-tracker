@@ -12,7 +12,7 @@
 
 ## 截图
 
-![screenshot](./screenshot.png)
+![screenshot](./screen.png)
 
 ## 功能特性
 

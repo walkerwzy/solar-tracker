@@ -12,7 +12,7 @@ A real-time solar tracking simulation with 3D visualization and motor control ca
 
 ## Screenshot
 
-![Screenshot](./screenshot.png)
+![Screenshot](./screen.png)
 
 ## Features
 
@@ -43,8 +43,8 @@ Edit `main.py` to change default parameters:
 config = {
     "lat": 31.23,           # Latitude
     "lon": 121.47,         # Longitude
-    "target_azimuth": 25.0, # Target reflection direction
-    "target_altitude": 10.0, # Target reflection elevation
+    "target_azimuth": 25.0, # The angle between the target direction and the north
+    "target_altitude": 10.0, # The angle between the target direction and the horizontal plane
     "timezone": "Asia/Shanghai"
 }
 ```
