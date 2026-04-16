@@ -3,7 +3,7 @@ from fastapi import FastAPI
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
-from tracker_logic import SolarReflector
+from .tracker_logic import SolarReflector
 import datetime
 import pytz
 
