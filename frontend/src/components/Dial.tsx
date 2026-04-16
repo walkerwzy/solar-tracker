@@ -75,7 +75,7 @@ export const Dial: React.FC<DialProps> = ({ label, value, percentage, type, clas
           "absolute inset-0 flex items-center justify-center",
           type === 'azimuth' ? "pt-10" : "items-end justify-end pb-2 pr-4"
         )}>
-          <span className="font-mono text-[10px] text-on-surface-dim">{type === 'azimuth' ? '360°' : '90°'}</span>
+          <span className="font-mono text-[10px] text-on-surface-dim">{type === 'azimuth' ? '360°' : '0°'}</span>
         </div>
       </div>
       <span className="font-mono text-primary font-bold">{value}</span>
