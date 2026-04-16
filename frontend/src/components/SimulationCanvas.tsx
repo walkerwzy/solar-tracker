@@ -159,6 +159,10 @@ export const SimulationCanvas: React.FC<SimulationCanvasProps> = ({ time }) => {
       requestAnimationFrame(animate);
       if (sceneRef.current) {
         sceneRef.current.renderer.render(sceneRef.current.scene, sceneRef.current.camera);
+        // Debug: check if renderer has a canvas
+        if (sceneRef.current.renderer.domElement) {
+          // console.log('Renderer canvas exists');
+        }
       }
     };
     animate();
@@ -173,17 +177,11 @@ export const SimulationCanvas: React.FC<SimulationCanvasProps> = ({ time }) => {
   }, []);
 
   useEffect(() => {
-    console.log('SimulationCanvas: time changed to', time);
-    if (!sceneRef.current) {
-      console.log('SimulationCanvas: sceneRef.current is null');
-      return;
-    }
-    console.log('SimulationCanvas: updating scene');
+    if (!sceneRef.current) return;
 
     const { sunGroup, mirrorMesh, incomingBeam, reflectedBeam, incomingCore, reflectedCore, directionalLight } = sceneRef.current;
     
     const { position: sunPos } = calculateSunPosition(time);
-    console.log('SimulationCanvas: sunPos', sunPos);
     sunGroup.position.copy(sunPos);
     directionalLight.position.copy(sunPos);
 

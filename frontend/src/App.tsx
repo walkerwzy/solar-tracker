@@ -22,6 +22,8 @@ interface SunriseSunset {
 export default function App() {
   const [time, setTime] = useState(12);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [playbackSpeed, setPlaybackSpeed] = useState(1);
+  const [isReversed, setIsReversed] = useState(false);
   const [hOffset, setHOffset] = useState(0);
   const [vOffset, setVOffset] = useState(0);
   const [selectedDate, setSelectedDate] = useState(() => {
@@ -115,7 +117,8 @@ export default function App() {
     if (isPlaying) {
       interval = setInterval(() => {
         setTime((prev) => {
-          let next = prev + 0.02;
+          const delta = 0.02 * playbackSpeed * (isReversed ? -1 : 1);
+          let next = prev + delta;
           if (next > sunsetTime) next = sunriseTime;
           if (next < sunriseTime) next = sunsetTime;
           return next;
@@ -123,7 +126,7 @@ export default function App() {
       }, 30);
     }
     return () => clearInterval(interval);
-  }, [isPlaying, sunriseTime, sunsetTime]);
+  }, [isPlaying, sunriseTime, sunsetTime, playbackSpeed, isReversed]);
 
   return (
     <main className="h-screen flex p-10 gap-10 overflow-hidden">
@@ -145,14 +148,16 @@ export default function App() {
           setIsPlaying={setIsPlaying}
           sunriseTime={sunriseTime}
           sunsetTime={sunsetTime}
-          selectedDate={selectedDate}
-          setSelectedDate={setSelectedDate}
+          playbackSpeed={playbackSpeed}
+          setPlaybackSpeed={setPlaybackSpeed}
+          isReversed={isReversed}
+          setIsReversed={setIsReversed}
         />
       </section>
 
       {/* Right Side Data Panel */}
       <div className="w-[400px]">
-        <TelemetryPanel
+<TelemetryPanel
           time={time}
           azimuth={actualSunData.azimuth || localSunData.azimuth}
           altitude={actualSunData.altitude || localSunData.altitude}
@@ -162,6 +167,8 @@ export default function App() {
           vOffset={vOffset}
           setHOffset={setHOffset}
           setVOffset={setVOffset}
+          selectedDate={selectedDate}
+          setSelectedDate={setSelectedDate}
         />
       </div>
     </main>

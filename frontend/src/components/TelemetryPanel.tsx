@@ -1,5 +1,5 @@
 import React from 'react';
-import { Clock, MapPin, Sun, Settings2, Download, LocateFixed } from 'lucide-react';
+import { Clock, MapPin, Sun, Settings2, Download, LocateFixed, Calendar } from 'lucide-react';
 import { Dial } from './Dial';
 
 interface TelemetryPanelProps {
@@ -12,6 +12,8 @@ interface TelemetryPanelProps {
   vOffset: number;
   setHOffset: (v: number) => void;
   setVOffset: (v: number) => void;
+  selectedDate: string;
+  setSelectedDate: (d: string) => void;
 }
 
 export const TelemetryPanel: React.FC<TelemetryPanelProps> = ({
@@ -23,7 +25,9 @@ export const TelemetryPanel: React.FC<TelemetryPanelProps> = ({
   hOffset,
   vOffset,
   setHOffset,
-  setVOffset
+  setVOffset,
+  selectedDate,
+  setSelectedDate
 }) => {
   const formatTime = (t: number) => {
     const hours = Math.floor(t);
@@ -33,6 +37,11 @@ export const TelemetryPanel: React.FC<TelemetryPanelProps> = ({
   };
 
   const currentDate = new Date().toISOString().split('T')[0];
+
+  const formatDate = (dateStr: string) => {
+    const d = new Date(dateStr);
+    return `${d.getMonth() + 1}月${d.getDate()}日`;
+  };
 
   return (
     <section className="glass-panel p-8 flex flex-col gap-8 h-full overflow-y-auto border-none">
@@ -44,9 +53,26 @@ export const TelemetryPanel: React.FC<TelemetryPanelProps> = ({
       <div className="space-y-6">
         {/* Temporal Reference */}
         <div className="bg-white/5 p-6 rounded-[24px] border border-white/10">
-          <div className="flex items-center gap-2 mb-3">
-            <Clock className="text-primary w-4 h-4" />
-            <span className="text-[10px] text-on-surface-dim uppercase tracking-widest">Temporal Reference</span>
+          <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center gap-2">
+              <Clock className="text-primary w-4 h-4" />
+              <span className="text-[10px] text-on-surface-dim uppercase tracking-widest">Temporal Reference</span>
+            </div>
+            <div className="relative">
+              <input
+                type="date"
+                id="panel-date-picker"
+                className="absolute opacity-0 w-6 h-6 cursor-pointer z-10"
+                value={selectedDate}
+                onChange={(e) => setSelectedDate(e.target.value)}
+              />
+              <label 
+                htmlFor="panel-date-picker" 
+                className="flex items-center text-[10px] text-on-surface-dim cursor-pointer hover:text-primary transition-colors pointer-events-none"
+              >
+                <Calendar className="w-3 h-3" />
+              </label>
+            </div>
           </div>
           <div className="font-mono text-lg text-on-surface tracking-wider">
             {currentDate} {formatTime(time)}
