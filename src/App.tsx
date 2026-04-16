@@ -122,7 +122,7 @@ export default function App() {
       </div>
 
       {/* Right Side Data Panel */}
-      <div className="w-full md:w-[768px] lg:w-[400px] lg:min-w-[400px] order-3 lg:order-3 no-scrollbar">
+      <div className="w-full lg:w-[400px] lg:min-w-[400px] order-3 lg:order-3 no-scrollbar">
 <TelemetryPanel
           time={time}
           azimuth={actualSunData.azimuth}
