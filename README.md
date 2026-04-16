@@ -18,6 +18,10 @@ A real-time solar tracking simulation with 3D visualization and motor control ca
 - 🎨 3D visualization with Three.js
 - 📊 Live telemetry dashboard
 
+## Screenshots
+
+![Helios Tracker Screenshot](./screenshot.png)
+
 ## Quick Start
 
 ### Development
