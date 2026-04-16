@@ -67,9 +67,9 @@ export const TimeControls: React.FC<TimeControlsProps> = ({
   };
 
   return (
-    <div className="absolute bottom-10 left-1/2 -translate-x-1/2 w-[90%] max-w-2xl z-20">
-      <div className="glass-panel p-8 shadow-2xl border-none bg-white/5">
-        <div className="flex justify-between items-center mb-6">
+    <div className="absolute bottom-4 lg:bottom-10 left-1/2 -translate-x-1/2 w-[90%] max-w-2xl z-20">
+      <div className="glass-panel p-4 lg:p-8 shadow-2xl border-none bg-white/5">
+        <div className="flex justify-between items-center mb-4 lg:mb-6">
           <span className="text-[10px] font-mono text-on-surface-dim">
             {formatDawn(sunriseTime)} (DAWN)
           </span>
@@ -82,7 +82,7 @@ export const TimeControls: React.FC<TimeControlsProps> = ({
         </div>
         
         <input
-          className="w-full h-1 bg-white/10 rounded-full appearance-none cursor-pointer accent-white"
+          className="w-full h-1 lg:h-1.5 bg-white/10 rounded-full appearance-none cursor-pointer accent-white"
           id="time-slider"
           type="range"
           min={sunriseTime}
@@ -92,7 +92,7 @@ export const TimeControls: React.FC<TimeControlsProps> = ({
           onChange={(e) => setTime(parseFloat(e.target.value))}
         />
 
-        <div className="flex justify-between items-center mt-6">
+        <div className="flex justify-between items-center mt-4 lg:mt-6">
           <button 
             className={`text-on-surface-dim hover:text-primary transition-colors ${isReversed ? 'text-primary' : ''}`}
             onClick={handleRewind}

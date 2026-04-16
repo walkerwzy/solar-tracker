@@ -76,13 +76,13 @@ export default function App() {
   }, [isPlaying, sunriseTime, sunsetTime, playbackSpeed, isReversed]);
 
   return (
-    <main className="h-screen flex p-10 gap-10 overflow-hidden">
+    <main className="h-screen flex flex-col lg:flex-row p-4 lg:p-10 gap-4 lg:gap-10 overflow-hidden">
       {/* Simulation Viewport */}
-      <section className="flex-1 relative overflow-hidden glass-panel">
-        <div className="absolute top-8 left-8 z-20 pointer-events-none">
-          <div className="glass-panel p-6 border-none bg-white/5">
+      <section className="flex-1 relative overflow-hidden glass-panel min-h-[300px] lg:min-h-0 order-1 lg:order-1">
+        <div className="absolute top-4 lg:top-8 left-4 lg:left-8 z-20 pointer-events-none">
+          <div className="glass-panel p-4 lg:p-6 border-none bg-white/5">
             <p className="text-[10px] text-primary uppercase font-bold tracking-widest mb-1">Active Viewport</p>
-            <h3 className="font-display text-2xl text-on-surface font-light">Reflection Logic Alpha</h3>
+            <h3 className="font-display text-lg lg:text-2xl text-on-surface font-light">Reflection Logic Alpha</h3>
           </div>
         </div>
 
@@ -103,7 +103,7 @@ export default function App() {
       </section>
 
       {/* Right Side Data Panel */}
-      <div className="w-[400px]">
+      <div className="w-full lg:w-[400px] lg:min-w-[400px] order-2 lg:order-2">
 <TelemetryPanel
           time={time}
           azimuth={actualSunData.azimuth}

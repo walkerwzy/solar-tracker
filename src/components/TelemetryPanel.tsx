@@ -49,7 +49,7 @@ export const TelemetryPanel: React.FC<TelemetryPanelProps> = ({
   const currentDate = new Date().toISOString().split('T')[0];
 
   return (
-    <section className="glass-panel p-8 flex flex-col gap-8 h-full overflow-y-auto no-scrollbar border-none">
+    <section className="glass-panel p-4 lg:p-8 flex flex-col gap-6 lg:gap-8 h-full overflow-y-auto no-scrollbar border-none">
       <div className="flex justify-between items-center">
         <h3 className="font-display text-2xl font-bold text-on-surface tracking-tight">Live Telemetry</h3>
         <span className="text-[10px] text-primary font-mono bg-primary/10 px-2 py-0.5 rounded border border-primary/20">STABLE</span>
@@ -108,12 +108,12 @@ export const TelemetryPanel: React.FC<TelemetryPanelProps> = ({
         </div>
 
         {/* Solar Dynamics */}
-        <div className="bg-white/5 p-6 rounded-[24px] border border-white/10 space-y-6">
+        <div className="bg-white/5 p-4 lg:p-6 rounded-[24px] border border-white/10 space-y-4 lg:space-y-6">
           <div className="flex items-center gap-2 mb-2">
             <Sun className="text-primary w-4 h-4" />
             <span className="text-[10px] text-on-surface-dim uppercase tracking-widest">Solar Dynamics</span>
           </div>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-2 gap-2 lg:gap-4">
             <Dial
               label="Azimuth"
               value={`${azimuth.toFixed(1)}°`}
