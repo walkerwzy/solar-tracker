@@ -173,11 +173,17 @@ export const SimulationCanvas: React.FC<SimulationCanvasProps> = ({ time }) => {
   }, []);
 
   useEffect(() => {
-    if (!sceneRef.current) return;
+    console.log('SimulationCanvas: time changed to', time);
+    if (!sceneRef.current) {
+      console.log('SimulationCanvas: sceneRef.current is null');
+      return;
+    }
+    console.log('SimulationCanvas: updating scene');
 
     const { sunGroup, mirrorMesh, incomingBeam, reflectedBeam, incomingCore, reflectedCore, directionalLight } = sceneRef.current;
     
     const { position: sunPos } = calculateSunPosition(time);
+    console.log('SimulationCanvas: sunPos', sunPos);
     sunGroup.position.copy(sunPos);
     directionalLight.position.copy(sunPos);
 
