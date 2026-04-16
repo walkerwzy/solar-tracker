@@ -1,21 +1,25 @@
 {
-  "rewrites": [
+  "builds": [
     {
-      "source": "/api/:path*",
-      "destination": "/api/:path*"
+      "src": "api/index.py",
+      "use": "@vercel/python"
     },
     {
-      "source": "/(index.html)?",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/:path*",
-      "destination": "/:path*"
+      "src": "frontend/package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "dist"
+      }
     }
   ],
-  "functions": {
-    "api/**/*.py": {
-      "runtime": "python3.12"
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "/api/index.py"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/frontend/dist/$1"
     }
-  }
+  ]
 }
