@@ -67,8 +67,8 @@ export const TimeControls: React.FC<TimeControlsProps> = ({
   };
 
   return (
-    <div className="w-full max-w-2xl">
-      <div className="glass-panel p-4 lg:p-8 shadow-2xl border-none bg-white/5">
+    <div className="absolute bottom-10 left-1/2 -translate-x-1/2 w-[90%] max-w-2xl z-20">
+      <div className="glass-panel p-8 shadow-2xl border-none bg-white/5">
         <div className="flex justify-between items-center mb-4 lg:mb-6">
           <span className="text-[10px] font-mono text-on-surface-dim">
             {formatDawn(sunriseTime)} (DAWN)

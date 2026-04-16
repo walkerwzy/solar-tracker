@@ -78,7 +78,7 @@ export default function App() {
   return (
     <main className="h-screen flex flex-col lg:flex-row p-4 lg:p-10 gap-4 lg:gap-10 overflow-y-auto lg:overflow-hidden">
       {/* Simulation Viewport */}
-      <section className="flex-1 relative overflow-hidden glass-panel min-h-[225px] md:min-h-[450px] lg:min-h-0 order-1 lg:order-1">
+      <section className="flex-1 relative glass-panel min-h-[225px] md:min-h-[450px] lg:min-h-0 order-1 lg:order-1">
         <div className="absolute top-4 lg:top-8 left-4 lg:left-8 z-20 pointer-events-none">
           <div className="glass-panel p-4 lg:p-6 border-none bg-white/5">
             <p className="text-[10px] text-primary uppercase font-bold tracking-widest mb-1">Active Viewport</p>
@@ -87,22 +87,22 @@ export default function App() {
         </div>
 
         <SimulationCanvas time={time} />
-      </section>
 
-      <div className="lg:block hidden md:hidden">
-        <TimeControls
-          time={time}
-          setTime={setTime}
-          isPlaying={isPlaying}
-          setIsPlaying={setIsPlaying}
-          sunriseTime={sunriseTime}
-          sunsetTime={sunsetTime}
-          playbackSpeed={playbackSpeed}
-          setPlaybackSpeed={setPlaybackSpeed}
-          isReversed={isReversed}
-          setIsReversed={setIsReversed}
-        />
-      </div>
+        <div className="hidden lg:block">
+          <TimeControls
+            time={time}
+            setTime={setTime}
+            isPlaying={isPlaying}
+            setIsPlaying={setIsPlaying}
+            sunriseTime={sunriseTime}
+            sunsetTime={sunsetTime}
+            playbackSpeed={playbackSpeed}
+            setPlaybackSpeed={setPlaybackSpeed}
+            isReversed={isReversed}
+            setIsReversed={setIsReversed}
+          />
+        </div>
+      </section>
 
       <div className="lg:hidden w-full order-2">
         <TimeControls
