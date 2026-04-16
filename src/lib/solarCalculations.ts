@@ -11,7 +11,7 @@ export function calculateSunPosition(time: number) {
   const angle = (progress * Math.PI) - (Math.PI / 2);
 
   const x = -2.5 + Math.cos(angle) * sunOrbitRadius;
-  const y = Math.sin(Math.PI * progress) * (sunOrbitRadius * 0.8);
+  const y = Math.sin(Math.PI * progress) * (sunOrbitRadius * 0.99); // 太阳高度 * 0.8
   const z = Math.sin(angle) * (sunOrbitRadius * 0.5);
 
   const azimuth = 180 + (angle * 180 / Math.PI);

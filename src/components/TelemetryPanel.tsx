@@ -14,6 +14,9 @@ interface TelemetryPanelProps {
   setVOffset: (v: number) => void;
   selectedDate: string;
   setSelectedDate: (d: string) => void;
+  lat: number;
+  lon: number;
+  declination: number;
 }
 
 export const TelemetryPanel: React.FC<TelemetryPanelProps> = ({
@@ -27,7 +30,10 @@ export const TelemetryPanel: React.FC<TelemetryPanelProps> = ({
   setHOffset,
   setVOffset,
   selectedDate,
-  setSelectedDate
+  setSelectedDate,
+  lat,
+  lon,
+  declination
 }) => {
   const formatTime = (t: number) => {
     const hours = Math.floor(t);
@@ -36,12 +42,11 @@ export const TelemetryPanel: React.FC<TelemetryPanelProps> = ({
     return `${hours.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
   };
 
-  const currentDate = new Date().toISOString().split('T')[0];
-
   const formatDate = (dateStr: string) => {
-    const d = new Date(dateStr);
-    return `${d.getMonth() + 1}月${d.getDate()}日`;
+    return dateStr;
   };
+
+  const currentDate = new Date().toISOString().split('T')[0];
 
   return (
     <section className="glass-panel p-8 flex flex-col gap-8 h-full overflow-y-auto border-none">
@@ -58,24 +63,24 @@ export const TelemetryPanel: React.FC<TelemetryPanelProps> = ({
               <Clock className="text-primary w-4 h-4" />
               <span className="text-[10px] text-on-surface-dim uppercase tracking-widest">Temporal Reference</span>
             </div>
-            <div className="relative">
+            <div className="relative w-4 h-8">
               <input
                 type="date"
                 id="panel-date-picker"
-                className="absolute opacity-0 w-8 h-8 -m-1 cursor-pointer z-50"
+                className="absolute inset-0 opacity-0 cursor-pointer z-10"
                 value={selectedDate}
                 onChange={(e) => setSelectedDate(e.target.value)}
               />
-              <label 
-                htmlFor="panel-date-picker" 
-                className="flex items-center text-[10px] text-on-surface-dim cursor-pointer hover:text-primary transition-colors"
+              <label
+                htmlFor="panel-date-picker"
+                className="absolute inset-0 flex items-center justify-center cursor-pointer"
               >
-                <Calendar className="w-3 h-3" />
+                <Calendar className="w-4 h-4 pointer-events-none" />
               </label>
             </div>
           </div>
           <div className="font-mono text-lg text-on-surface tracking-wider">
-            {currentDate} {formatTime(time)}
+            {selectedDate} {formatTime(time)}
           </div>
         </div>
 
@@ -93,11 +98,11 @@ export const TelemetryPanel: React.FC<TelemetryPanelProps> = ({
           <div className="grid grid-cols-2 gap-2 text-sm">
             <div className="flex flex-col">
               <span className="text-[10px] text-on-surface-dim">LATITUDE</span>
-              <span className="font-mono text-on-surface">34.0522° N</span>
+              <span className="font-mono text-on-surface">{lat.toFixed(2)}° {lat >= 0 ? 'N' : 'S'}</span>
             </div>
             <div className="flex flex-col">
               <span className="text-[10px] text-on-surface-dim">LONGITUDE</span>
-              <span className="font-mono text-on-surface">118.2437° W</span>
+              <span className="font-mono text-on-surface">{lon.toFixed(2)}° {lon >= 0 ? 'E' : 'W'}</span>
             </div>
           </div>
         </div>
@@ -124,7 +129,7 @@ export const TelemetryPanel: React.FC<TelemetryPanelProps> = ({
           </div>
           <div className="flex justify-between items-center pt-4 border-t border-white/10">
             <span className="text-sm text-on-surface-dim">Declination</span>
-            <span className="font-mono text-on-surface font-medium">23.4°</span>
+            <span className="font-mono text-on-surface font-medium">{declination.toFixed(1)}°</span>
           </div>
         </div>
 
