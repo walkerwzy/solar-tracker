@@ -87,22 +87,22 @@ export default function App() {
         </div>
 
         <SimulationCanvas time={time} />
-
-        <div className="hidden lg:block">
-          <TimeControls
-            time={time}
-            setTime={setTime}
-            isPlaying={isPlaying}
-            setIsPlaying={setIsPlaying}
-            sunriseTime={sunriseTime}
-            sunsetTime={sunsetTime}
-            playbackSpeed={playbackSpeed}
-            setPlaybackSpeed={setPlaybackSpeed}
-            isReversed={isReversed}
-            setIsReversed={setIsReversed}
-          />
-        </div>
       </section>
+
+      <div className="lg:block hidden md:hidden">
+        <TimeControls
+          time={time}
+          setTime={setTime}
+          isPlaying={isPlaying}
+          setIsPlaying={setIsPlaying}
+          sunriseTime={sunriseTime}
+          sunsetTime={sunsetTime}
+          playbackSpeed={playbackSpeed}
+          setPlaybackSpeed={setPlaybackSpeed}
+          isReversed={isReversed}
+          setIsReversed={setIsReversed}
+        />
+      </div>
 
       <div className="lg:hidden w-full order-2">
         <TimeControls
