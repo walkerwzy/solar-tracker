@@ -61,12 +61,14 @@ config = {
 
 ```
 solar/
-├── main.py           # FastAPI server & config
-├── tracker_logic.py  # pysolar calculations
-├── index.html        # Embedded UI with Three.js
-├── pyproject.toml    # Dependencies
-├── AGENTS.md         # Development guide
-└── .gitignore        # Git ignore rules
+├── api/
+│   ├── main.py           # FastAPI server & config
+│   └── tracker_logic.py  # pysolar calculations
+├── index.html            # Embedded UI with Three.js
+├── pyproject.toml        # Dependencies
+├── vercel.json           # Vercel deployment config
+├── AGENTS.md             # Development guide
+└── .gitignore            # Git ignore rules
 ```
 
 ## Tech Stack

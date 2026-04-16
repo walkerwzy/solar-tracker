@@ -61,13 +61,15 @@ config = {
 
 ```
 solar/
-├── main.py           # FastAPI 服务器和配置
-├── tracker_logic.py  # pysolar 太阳计算逻辑
-├── index.html        # 嵌入式 Three.js 界面
-├── pyproject.toml    # 项目依赖
-├── AGENTS.md         # 开发指南
-├── .gitignore        # Git 忽略规则
-└── README_zh.md     # 中文说明
+├── api/
+│   ├── main.py           # FastAPI 服务器和配置
+│   └── tracker_logic.py  # pysolar 太阳计算逻辑
+├── index.html            # 嵌入式 Three.js 界面
+├── pyproject.toml        # 项目依赖
+├── vercel.json           # Vercel 部署配置
+├── AGENTS.md             # 开发指南
+├── .gitignore            # Git 忽略规则
+└── README_zh.md          # 中文说明
 ```
 
 ## 技术栈
