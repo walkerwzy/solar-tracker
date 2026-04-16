@@ -88,6 +88,23 @@ export default function App() {
 
         <SimulationCanvas time={time} />
 
+        <div className="hidden lg:block">
+          <TimeControls
+            time={time}
+            setTime={setTime}
+            isPlaying={isPlaying}
+            setIsPlaying={setIsPlaying}
+            sunriseTime={sunriseTime}
+            sunsetTime={sunsetTime}
+            playbackSpeed={playbackSpeed}
+            setPlaybackSpeed={setPlaybackSpeed}
+            isReversed={isReversed}
+            setIsReversed={setIsReversed}
+          />
+        </div>
+      </section>
+
+      <div className="lg:hidden order-2">
         <TimeControls
           time={time}
           setTime={setTime}
@@ -100,10 +117,10 @@ export default function App() {
           isReversed={isReversed}
           setIsReversed={setIsReversed}
         />
-      </section>
+      </div>
 
       {/* Right Side Data Panel */}
-      <div className="w-full lg:w-[400px] lg:min-w-[400px] order-2 lg:order-2">
+      <div className="w-full lg:w-[400px] lg:min-w-[400px] order-3 lg:order-3">
 <TelemetryPanel
           time={time}
           azimuth={actualSunData.azimuth}
