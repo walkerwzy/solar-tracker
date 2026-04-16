@@ -1,6 +1,8 @@
+> 我写这个项目的目的，就是想让我家能有更多的时间接受太阳光的照射，想到了用镜子追踪太阳然后反射进房间的方案
+
 # 太阳反射镜追踪器
 
-实时太阳追踪模拟系统，带有3D可视化界面和电机控制计算。
+一款实时太阳追踪与反射，整合地理感知与天文算法，计算并输出高精度的双轴电机控制参数的 3D 模拟器。
 
 ![太阳追踪器](https://img.shields.io/badge/Python-3.13+-blue.svg)
 ![FastAPI](https://img.shields.io/badge/FastAPI-0.100+-green.svg)
@@ -72,4 +74,4 @@ solar/
 
 ## 许可证
 
-MIT
+See [LICENSE](./LICENSE) for details.

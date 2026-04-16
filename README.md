@@ -1,8 +1,10 @@
+> 我写这个项目的目的，就是想让我家能有更多的时间接受太阳光的照射，想到了用镜子追踪太阳然后反射进房间的方案
+
 # Solar Reflector Tracker
 
 > 📖 [中文版](./README_zh.md)
 
-A real-time solar tracking simulation with 3D visualization and motor control calculations.
+A real-time solar tracking simulation with 3D visualization and motor control calculations, with geospatial awareness and astronomical calculations.
 
 ![Solar Tracker](https://img.shields.io/badge/Python-3.13+-blue.svg)
 ![FastAPI](https://img.shields.io/badge/FastAPI-0.100+-green.svg)
@@ -71,4 +73,4 @@ solar/
 
 ## License
 
-MIT
+See [LICENSE](./LICENSE) for details.
