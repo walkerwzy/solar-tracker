@@ -43,8 +43,8 @@ http://localhost:8000
 config = {
     "lat": 31.23,           # 纬度
     "lon": 121.47,         # 经度
-    "target_azimuth": 25.0, # 目标反射方向
-    "target_altitude": 10.0, # 目标反射高度
+    "target_azimuth": 25.0, # 目标反射方向与正北方向的夹角
+    "target_altitude": 10.0, # 目标反射高度与水平面的夹角
     "timezone": "Asia/Shanghai"
 }
 ```

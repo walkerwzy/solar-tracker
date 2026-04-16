@@ -15,17 +15,17 @@ dependencies = [
 requires-python = ">=3.9"
 
 [project.scripts]
-app = "main:app"
+app = "api.main:app"
 
 [tool.setuptools]
-py-modules = ["main", "tracker_logic"]
+py-modules = ["api.main", "api.tracker_logic"]
 
 [build-system]
 requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
 
 [tool.vercel]
-includeFiles = "main.py,tracker_logic.py,index.html"
+includeFiles = "api/*.py,index.html"
 
 [tool.uv]
 # 如果你使用 uv，可以在这里进行特定配置
