@@ -35,6 +35,15 @@
   @apply bg-surface-container backdrop-blur-[20px] border border-outline-variant rounded-[32px];
 }
 
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
 input[type="range"]::-webkit-slider-thumb {
   -webkit-appearance: none;
   height: 16px;
