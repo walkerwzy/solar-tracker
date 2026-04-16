@@ -79,7 +79,7 @@ export default function App() {
     <main className="h-screen flex flex-col lg:flex-row p-4 lg:p-10 gap-4 lg:gap-10 overflow-y-auto lg:overflow-hidden">
       {/* Simulation Viewport */}
       <section className="flex-1 relative overflow-hidden glass-panel min-h-[225px] md:min-h-[450px] lg:min-h-0 order-1 lg:order-1">
-        <div className="absolute top-4 lg:top-8 left-4 lg:left-8 z-20 pointer-events-none">
+        <div className="hidden lg:block absolute top-4 lg:top-8 left-4 lg:left-8 z-20 pointer-events-none">
           <div className="glass-panel p-4 lg:p-6 border-none bg-white/5">
             <p className="text-[10px] text-primary uppercase font-bold tracking-widest mb-1">Active Viewport</p>
             <h3 className="font-display text-lg lg:text-2xl text-on-surface font-light">Reflection Logic Alpha</h3>
