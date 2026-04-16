@@ -62,13 +62,13 @@ export const TelemetryPanel: React.FC<TelemetryPanelProps> = ({
               <input
                 type="date"
                 id="panel-date-picker"
-                className="absolute opacity-0 w-6 h-6 cursor-pointer z-10"
+                className="absolute opacity-0 w-8 h-8 -m-1 cursor-pointer z-50"
                 value={selectedDate}
                 onChange={(e) => setSelectedDate(e.target.value)}
               />
               <label 
                 htmlFor="panel-date-picker" 
-                className="flex items-center text-[10px] text-on-surface-dim cursor-pointer hover:text-primary transition-colors pointer-events-none"
+                className="flex items-center text-[10px] text-on-surface-dim cursor-pointer hover:text-primary transition-colors"
               >
                 <Calendar className="w-3 h-3" />
               </label>
