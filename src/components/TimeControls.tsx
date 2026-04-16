@@ -12,6 +12,7 @@ interface TimeControlsProps {
   setPlaybackSpeed: (s: number) => void;
   isReversed: boolean;
   setIsReversed: (r: boolean) => void;
+  embedded?: boolean;
 }
 
 export const TimeControls: React.FC<TimeControlsProps> = ({ 
@@ -24,7 +25,8 @@ export const TimeControls: React.FC<TimeControlsProps> = ({
   playbackSpeed,
   setPlaybackSpeed,
   isReversed,
-  setIsReversed
+  setIsReversed,
+  embedded = false
 }) => {
   
   const cycleSpeed = (current: number) => {
@@ -66,10 +68,19 @@ export const TimeControls: React.FC<TimeControlsProps> = ({
     return formatTime(t);
   };
 
+  const containerClass = embedded 
+    ? "absolute bottom-10 left-1/2 -translate-x-1/2 w-[90%] max-w-2xl z-20"
+    : "w-full max-w-2xl";
+
+  const paddingClass = embedded ? "p-8" : "p-4 lg:p-8";
+  const marginClass = embedded ? "mb-6" : "mb-4 lg:mb-6";
+  const heightClass = embedded ? "h-1.5" : "h-1 lg:h-1.5";
+  const mtClass = embedded ? "mt-6" : "mt-4 lg:mt-6";
+
   return (
-    <div className="absolute bottom-10 left-1/2 -translate-x-1/2 w-[90%] max-w-2xl z-20">
-      <div className="glass-panel p-8 shadow-2xl border-none bg-white/5">
-        <div className="flex justify-between items-center mb-4 lg:mb-6">
+    <div className={containerClass}>
+      <div className={`glass-panel ${paddingClass} shadow-2xl border-none bg-white/5`}>
+        <div className={`flex justify-between items-center ${marginClass}`}>
           <span className="text-[10px] font-mono text-on-surface-dim">
             {formatDawn(sunriseTime)} (DAWN)
           </span>
@@ -82,7 +93,7 @@ export const TimeControls: React.FC<TimeControlsProps> = ({
         </div>
         
         <input
-          className="w-full h-1 lg:h-1.5 bg-white/10 rounded-full appearance-none cursor-pointer accent-white"
+          className={`w-full ${heightClass} bg-white/10 rounded-full appearance-none cursor-pointer accent-white`}
           id="time-slider"
           type="range"
           min={sunriseTime}
@@ -92,7 +103,7 @@ export const TimeControls: React.FC<TimeControlsProps> = ({
           onChange={(e) => setTime(parseFloat(e.target.value))}
         />
 
-        <div className="flex justify-between items-center mt-4 lg:mt-6">
+        <div className={`flex justify-between items-center ${mtClass}`}>
           <button 
             className={`text-on-surface-dim hover:text-primary transition-colors ${isReversed ? 'text-primary' : ''}`}
             onClick={handleRewind}
