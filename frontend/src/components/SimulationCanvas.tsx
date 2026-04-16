@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import * as THREE from 'three';
-import { calculateSunPosition, calculateMirrorOrientation } from '@/src/lib/solarCalculations';
+import { calculateSunPosition, calculateMirrorOrientation } from '@/lib/solarCalculations';
 
 interface SimulationCanvasProps {
   time: number;
