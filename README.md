@@ -10,6 +10,10 @@ A real-time solar tracking simulation with 3D visualization and motor control ca
 ![FastAPI](https://img.shields.io/badge/FastAPI-0.100+-green.svg)
 ![Three.js](https://img.shields.io/badge/Three.js-0.160-orange.svg)
 
+## Screenshot
+
+![Screenshot](./screenshot.png)
+
 ## Features
 
 - 🌞 Real-time solar position calculation (altitude & azimuth)

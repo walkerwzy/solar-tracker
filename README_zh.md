@@ -10,6 +10,10 @@
 
 > 📖 [English Version](./README.md)
 
+## 截图
+
+![screenshot](./screenshot.png)
+
 ## 功能特性
 
 - 🌞 实时太阳位置计算（高度角 & 方位角）
