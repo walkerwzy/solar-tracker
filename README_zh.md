@@ -1,18 +1,12 @@
-> 我写这个项目的目的，就是想让我家能有更多的时间接受太阳光的照射，想到了用镜子追踪太阳然后反射进房间的方案
+# Helios Tracker 太阳追踪器
 
-# 太阳反射镜追踪器
+实时太阳追踪模拟系统，带有3D可视化界面和电机控制计算。
 
-一款实时太阳追踪与反射，整合地理感知与天文算法，计算并输出高精度的双轴电机控制参数的 3D 模拟器。
-
-![太阳追踪器](https://img.shields.io/badge/Python-3.13+-blue.svg)
+![太阳追踪器](https://img.shields.io/badge/React-19-blue.svg)
 ![FastAPI](https://img.shields.io/badge/FastAPI-0.100+-green.svg)
-![Three.js](https://img.shields.io/badge/Three.js-0.160-orange.svg)
+![Three.js](https://img.shields.io/badge/Three.js-0.183-orange.svg)
 
 > 📖 [English Version](./README.md)
-
-## 截图
-
-![screenshot](./screen.png)
 
 ## 功能特性
 
@@ -26,25 +20,43 @@
 
 ## 快速开始
 
+### 开发环境
+
 ```bash
-# 安装依赖
-uv sync
-# 运行服务器
-uv run uvicorn api.main:app --reload
-# 浏览器打开
-http://localhost:8000
+# 后端（终端 1）
+cd backend
+python -m uvicorn main:app --reload --port 8000
+
+# 前端（终端 2）
+cd frontend
+npm install
+npm run dev
+```
+
+打开 http://localhost:3000 - 前端代理 API 请求到后端。
+
+### 生产构建
+
+```bash
+# 构建前端
+cd frontend
+npm run build
+
+# 运行后端（从 backend/static 提供静态文件）
+cd ../backend
+python -m uvicorn main:app --port 8000
 ```
 
 ## 配置参数
 
-编辑 `main.py` 修改默认参数：
+编辑 `backend/main.py` 修改默认参数：
 
 ```python
 config = {
     "lat": 31.23,           # 纬度
     "lon": 121.47,         # 经度
-    "target_azimuth": 25.0, # 目标反射方向与正北方向的夹角
-    "target_altitude": 10.0, # 目标反射高度与水平面的夹角
+    "target_azimuth": 25.0, # 目标反射方向
+    "target_altitude": 10.0, # 目标反射高度
     "timezone": "Asia/Shanghai"
 }
 ```
@@ -60,23 +72,31 @@ config = {
 ## 项目结构
 
 ```
-solar/
-├── api/
-│   ├── main.py           # FastAPI 服务器和配置
-│   └── tracker_logic.py  # pysolar 太阳计算逻辑
-├── index.html            # 嵌入式 Three.js 界面
-├── pyproject.toml        # 项目依赖
-├── vercel.json           # Vercel 部署配置
-├── AGENTS.md             # 开发指南
-├── .gitignore            # Git 忽略规则
-└── README_zh.md          # 中文说明
+helios-tracker/
+├── frontend/                 # React + Vite + Three.js
+│   ├── src/
+│   │   ├── components/       # UI 组件
+│   │   ├── lib/             # 太阳计算逻辑
+│   │   ├── App.tsx           # 主应用
+│   │   └── main.tsx          # 入口文件
+│   ├── package.json
+│   └── vite.config.ts       # Vite 配置（含代理）
+│
+├── backend/                  # FastAPI Python 后端
+│   ├── main.py              # FastAPI 服务器
+│   ├── tracker_logic.py    # pysolar 太阳计算
+│   └── static/              # 构建后的前端（生产环境）
+│
+├── pyproject.toml           # Python 依赖
+├── package.json             # Node 依赖（供参考）
+└── README_zh.md            # 本文件
 ```
 
 ## 技术栈
 
+- **前端**: React 19, TypeScript, Three.js, Tailwind CSS v4, Framer Motion, Lucide React
 - **后端**: FastAPI, pysolar, pytz
-- **前端**: Three.js, Tailwind CSS, 原生 JavaScript
-- **构建**: UV 包管理器
+- **构建**: Vite, UV 包管理器
 
 ## 许可证
 

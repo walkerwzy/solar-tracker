@@ -1,10 +1,20 @@
-from fastapi import FastAPI, Request
+import os
+from fastapi import FastAPI
 from fastapi.responses import HTMLResponse
-from api.tracker_logic import SolarReflector
+from fastapi.staticfiles import StaticFiles
+from fastapi.middleware.cors import CORSMiddleware
+from tracker_logic import SolarReflector
 import datetime
 import pytz
 
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 config = {
     "lat": 31.23,
@@ -16,13 +26,27 @@ config = {
 
 TZ = pytz.timezone(config["timezone"])
 
-def read_html_template():
-    with open("index.html", "r", encoding="utf-8") as f:
-        return f.read()
+static_path = os.path.join(os.path.dirname(__file__), "static")
+if os.path.exists(static_path):
+    app.mount("/static", StaticFiles(directory=static_path), name="static")
+
+def read_index():
+    index_path = os.path.join(static_path, "index.html")
+    if os.path.exists(index_path):
+        with open(index_path, "r", encoding="utf-8") as f:
+            return f.read()
+    return """
+    <html>
+    <body style="font-family: sans-serif; padding: 2rem; text-align: center;">
+        <h1>Helios Tracker</h1>
+        <p>Frontend not built. Run <code>cd frontend && npm run build</code></p>
+    </body>
+    </html>
+    """
 
 @app.get("/", response_class=HTMLResponse)
 async def index():
-    return read_html_template()
+    return read_index()
 
 @app.get("/sunrise_sunset")
 async def sunrise_sunset(lat: float, lon: float, date: str):

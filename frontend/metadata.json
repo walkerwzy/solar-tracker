@@ -1,0 +1,6 @@
+{
+  "name": "Helios Tracer",
+  "description": "Solar reflection simulation and telemetry dashboard with real-time 3D visualization.",
+  "requestFramePermissions": [],
+  "majorCapabilities": []
+}
