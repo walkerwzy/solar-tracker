@@ -55,9 +55,9 @@ export const TelemetryPanel: React.FC<TelemetryPanelProps> = ({
         <span className="text-[10px] text-primary font-mono bg-primary/10 px-2 py-0.5 rounded border border-primary/20">STABLE</span>
       </div>
 
-      <div className="space-y-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-6">
         {/* Temporal Reference */}
-        <div className="bg-white/5 p-6 rounded-[24px] border border-white/10">
+        <div className="bg-white/5 p-4 md:p-6 rounded-[24px] border border-white/10">
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center gap-2">
               <Clock className="text-primary w-4 h-4" />
@@ -85,7 +85,7 @@ export const TelemetryPanel: React.FC<TelemetryPanelProps> = ({
         </div>
 
         {/* Node Geolocation */}
-        <div className="bg-white/5 p-6 rounded-[24px] border border-white/10">
+        <div className="bg-white/5 p-4 md:p-6 rounded-[24px] border border-white/10">
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center gap-2">
               <MapPin className="text-primary w-4 h-4" />
@@ -108,7 +108,7 @@ export const TelemetryPanel: React.FC<TelemetryPanelProps> = ({
         </div>
 
         {/* Solar Dynamics */}
-        <div className="bg-white/5 p-4 lg:p-6 rounded-[24px] border border-white/10 space-y-4 lg:space-y-6">
+        <div className="bg-white/5 p-4 md:p-6 rounded-[24px] border border-white/10 space-y-4 lg:space-y-6">
           <div className="flex items-center gap-2 mb-2">
             <Sun className="text-primary w-4 h-4" />
             <span className="text-[10px] text-on-surface-dim uppercase tracking-widest">Solar Dynamics</span>
