@@ -30,7 +30,7 @@ A real-time solar tracking simulation with 3D visualization and motor control ca
 # dependencies
 uv sync
 # Run the server
-uv run uvicorn main:app --reload
+uv run uvicorn api.main:app --reload
 # Open in browser
 http://localhost:8000
 ```

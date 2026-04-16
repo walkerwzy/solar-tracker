@@ -30,7 +30,7 @@
 # 安装依赖
 uv sync
 # 运行服务器
-uv run uvicorn main:app --reload
+uv run uvicorn api.main:app --reload
 # 浏览器打开
 http://localhost:8000
 ```
