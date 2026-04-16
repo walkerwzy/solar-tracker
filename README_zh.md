@@ -28,7 +28,7 @@
 
 ```bash
 # 后端（终端 1）
-cd backend
+cd api
 python -m uvicorn main:app --reload --port 8000
 
 # 前端（终端 2）
@@ -46,14 +46,14 @@ npm run dev
 cd frontend
 npm run build
 
-# 运行后端（从 backend/static 提供静态文件）
-cd ../backend
+# 运行后端（从 api/static 提供静态文件）
+cd ../api
 python -m uvicorn main:app --port 8000
 ```
 
 ## 配置参数
 
-编辑 `backend/main.py` 修改默认参数：
+编辑 `api/main.py` 修改默认参数：
 
 ```python
 config = {
@@ -86,7 +86,7 @@ helios-tracker/
 │   ├── package.json
 │   └── vite.config.ts       # Vite 配置（含代理）
 │
-├── backend/                  # FastAPI Python 后端
+├── api/                      # FastAPI Python 后端
 │   ├── main.py              # FastAPI 服务器
 │   ├── tracker_logic.py    # pysolar 太阳计算
 │   └── static/              # 构建后的前端（生产环境）

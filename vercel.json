@@ -1,19 +1,21 @@
 {
-  "$schema": "https://openapi.vercel.sh/vercel.json",
-  "builds": [
+  "rewrites": [
     {
-      "src": "frontend/package.json",
-      "use": "@vercel/static-build"
+      "source": "/api/:path*",
+      "destination": "/api/:path*"
     },
     {
-      "src": "backend/main.py",
-      "use": "@vercel/python"
+      "source": "/(index.html)?",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/:path*",
+      "destination": "/:path*"
     }
   ],
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "/backend/main.py"
+  "functions": {
+    "api/**/*.py": {
+      "runtime": "python3.12"
     }
-  ]
+  }
 }

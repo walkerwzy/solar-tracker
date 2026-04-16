@@ -28,7 +28,7 @@ A real-time solar tracking simulation with 3D visualization and motor control ca
 
 ```bash
 # Backend (terminal 1)
-cd backend
+cd api
 python -m uvicorn main:app --reload --port 8000
 
 # Frontend (terminal 2)
@@ -46,14 +46,14 @@ Open http://localhost:3000 - frontend proxies API requests to backend.
 cd frontend
 npm run build
 
-# Run backend (serves static from backend/static)
-cd ../backend
+# Run backend (serves static from api/static)
+cd ../api
 python -m uvicorn main:app --port 8000
 ```
 
 ## Configuration
 
-Edit `backend/main.py` to change default parameters:
+Edit `api/main.py` to change default parameters:
 
 ```python
 config = {
@@ -86,7 +86,7 @@ helios-tracker/
 │   ├── package.json
 │   └── vite.config.ts       # Vite config with proxy
 │
-├── backend/                  # FastAPI Python backend
+├── api/                      # FastAPI Python backend
 │   ├── main.py              # FastAPI server
 │   ├── tracker_logic.py    # pysolar calculations
 │   └── static/              # Built frontend (production)
