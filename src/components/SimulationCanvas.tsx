@@ -13,6 +13,7 @@ export const SimulationCanvas: React.FC<SimulationCanvasProps> = ({ time }) => {
     camera: THREE.PerspectiveCamera;
     renderer: THREE.WebGLRenderer;
     sunGroup: THREE.Group;
+    mirrorGroup: THREE.Group;
     mirrorMesh: THREE.Mesh;
     incomingBeam: THREE.Line;
     reflectedBeam: THREE.Line;
@@ -42,6 +43,14 @@ export const SimulationCanvas: React.FC<SimulationCanvasProps> = ({ time }) => {
     const grid = new THREE.GridHelper(50, 50, 0x1d1d37, 0x111127);
     scene.add(grid);
 
+    // North indicator
+    const northGeom = new THREE.ConeGeometry(0.3, 1, 4);
+    const northMat = new THREE.MeshBasicMaterial({ color: 0xff4444 });
+    const northArrow = new THREE.Mesh(northGeom, northMat);
+    northArrow.position.set(0, 0.5, -20);
+    northArrow.rotation.x = Math.PI;
+    scene.add(northArrow);
+
     // Mirror
     const mirrorGroup = new THREE.Group();
     const mirrorGeom = new THREE.BoxGeometry(2.5, 0.1, 2.5);
@@ -62,6 +71,20 @@ export const SimulationCanvas: React.FC<SimulationCanvasProps> = ({ time }) => {
     const support = new THREE.Mesh(supportGeom, supportMat);
     support.position.y = -1;
     mirrorGroup.add(support);
+
+    const normalLineGeom = new THREE.BufferGeometry().setFromPoints([
+      new THREE.Vector3(0, 0.1, 0),
+      new THREE.Vector3(0, 3, 0)
+    ]);
+    const normalLineMat = new THREE.LineDashedMaterial({
+      color: 0x00ff00,
+      dashSize: 0.3,
+      gapSize: 0.15,
+      linewidth: 2
+    });
+    const normalLine = new THREE.Line(normalLineGeom, normalLineMat);
+    normalLine.computeLineDistances();
+    mirrorGroup.add(normalLine);
 
     // Target (House)
     const houseGroup = new THREE.Group();
@@ -137,6 +160,7 @@ export const SimulationCanvas: React.FC<SimulationCanvasProps> = ({ time }) => {
       camera,
       renderer,
       sunGroup,
+      mirrorGroup,
       mirrorMesh,
       incomingBeam,
       reflectedBeam,
