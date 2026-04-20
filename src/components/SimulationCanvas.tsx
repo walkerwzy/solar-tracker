@@ -73,8 +73,37 @@ export const SimulationCanvas: React.FC<SimulationCanvasProps> = ({ time }) => {
     nSprite.scale.set(1, 1, 1);
     northGroup.add(nSprite);
 
-    northGroup.position.set(-20, 0, 0);
+    nortGroup.position.set(-20, 0, 0);
     scene.add(northGroup);
+
+    const sunGroup = new THREE.Group();
+    const sunSphere = new THREE.Mesh(
+      new THREE.SphereGeometry(0.8, 32, 32),
+      new THREE.MeshBasicMaterial({ color: 0xfff6f1 })
+    );
+    
+    const sunCanvas = document.createElement('canvas');
+    sunCanvas.width = 64; sunCanvas.height = 64;
+    const sunCtx = sunCanvas.getContext('2d')!;
+    const sunGradient = sunCtx.createRadialGradient(32, 32, 0, 32, 32, 32);
+    sunGradient.addColorStop(0, 'rgba(255, 255, 255, 1)');
+    sunGradient.addColorStop(0.2, 'rgba(255, 240, 200, 0.8)');
+    sunGradient.addColorStop(1, 'rgba(255, 150, 0, 0)');
+    sunCtx.fillStyle = sunGradient;
+    sunCtx.fillRect(0, 0, 64, 64);
+    const glowTexture = new THREE.CanvasTexture(sunCanvas);
+
+    const glowSprite = new THREE.Sprite(new THREE.SpriteMaterial({
+      map: glowTexture,
+      color: 0xff9d00,
+      transparent: true,
+      opacity: 0.7,
+      blending: THREE.AdditiveBlending
+    }));
+    glowSprite.scale.set(4, 4, 1);
+    sunSphere.add(glowSprite);
+    sunGroup.add(sunSphere);
+    scene.add(sunGroup);
 
     // Mirror
     const mirrorGroup = new THREE.Group();
