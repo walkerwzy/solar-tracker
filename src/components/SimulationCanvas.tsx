@@ -111,6 +111,25 @@ const normalLineGeom = new THREE.BufferGeometry().setFromPoints([
     normalLine.computeLineDistances();
     mirrorGroup.add(normalLine);
 
+    const createBeam = (color: number) => {
+      const mat = new THREE.LineBasicMaterial({ color, transparent: true, opacity: 0.4 });
+      const geom = new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(), new THREE.Vector3()]);
+      return new THREE.Line(geom, mat);
+    };
+    const incomingBeam = createBeam(0xffffff);
+    const reflectedBeam = createBeam(0x72dcff);
+    scene.add(incomingBeam, reflectedBeam);
+
+    const coreBeamMat = new THREE.MeshBasicMaterial({ color: 0x72dcff, transparent: true, opacity: 0.2 });
+    const incomingCore = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.05, 1), coreBeamMat);
+    const reflectedCore = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.05, 1), coreBeamMat);
+    scene.add(incomingCore, reflectedCore);
+
+    const ambientLight = new THREE.AmbientLight(0x404040, 1.5);
+    scene.add(ambientLight);
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 2);
+    scene.add(directionalLight);
+
     sceneRef.current = {
       scene,
       camera,
@@ -125,20 +144,6 @@ const normalLineGeom = new THREE.BufferGeometry().setFromPoints([
       reflectedCore,
       directionalLight
     };
-    const incomingBeam = createBeam(0xffffff);
-    const reflectedBeam = createBeam(0x72dcff);
-    scene.add(incomingBeam, reflectedBeam);
-
-    const coreBeamMat = new THREE.MeshBasicMaterial({ color: 0x72dcff, transparent: true, opacity: 0.2 });
-    const incomingCore = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.05, 1), coreBeamMat);
-    const reflectedCore = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.05, 1), coreBeamMat);
-    scene.add(incomingCore, reflectedCore);
-
-    // Lights
-    const ambientLight = new THREE.AmbientLight(0x404040, 1.5);
-    scene.add(ambientLight);
-    const directionalLight = new THREE.DirectionalLight(0xffffff, 2);
-    scene.add(directionalLight);
 
     sceneRef.current = {
       scene,
