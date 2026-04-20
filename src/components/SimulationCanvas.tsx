@@ -145,20 +145,6 @@ const normalLineGeom = new THREE.BufferGeometry().setFromPoints([
       directionalLight
     };
 
-    sceneRef.current = {
-      scene,
-      camera,
-      renderer,
-      sunGroup,
-      mirrorGroup,
-      mirrorMesh,
-      incomingBeam,
-      reflectedBeam,
-      incomingCore,
-      reflectedCore,
-      directionalLight
-    };
-
     const handleResize = () => {
       if (!containerRef.current || !sceneRef.current) return;
       const { camera, renderer } = sceneRef.current;
