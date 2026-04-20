@@ -15,6 +15,7 @@ export const SimulationCanvas: React.FC<SimulationCanvasProps> = ({ time }) => {
     sunGroup: THREE.Group;
     mirrorGroup: THREE.Group;
     mirrorMesh: THREE.Mesh;
+    normalLine: THREE.Line;
     incomingBeam: THREE.Line;
     reflectedBeam: THREE.Line;
     incomingCore: THREE.Mesh;
@@ -43,13 +44,37 @@ export const SimulationCanvas: React.FC<SimulationCanvasProps> = ({ time }) => {
     const grid = new THREE.GridHelper(50, 50, 0x1d1d37, 0x111127);
     scene.add(grid);
 
-    // North indicator
-    const northGeom = new THREE.ConeGeometry(0.3, 1, 4);
-    const northMat = new THREE.MeshBasicMaterial({ color: 0xff4444 });
-    const northArrow = new THREE.Mesh(northGeom, northMat);
-    northArrow.position.set(0, 0.5, -20);
-    northArrow.rotation.x = Math.PI;
-    scene.add(northArrow);
+    const northGroup = new THREE.Group();
+
+    const arrowStemGeom = new THREE.CylinderGeometry(0.08, 0.08, 2);
+    const arrowStemMat = new THREE.MeshBasicMaterial({ color: 0xff4444 });
+    const arrowStem = new THREE.Mesh(arrowStemGeom, arrowStemMat);
+    arrowStem.position.y = 1;
+    northGroup.add(arrowStem);
+
+    const arrowHeadGeom = new THREE.ConeGeometry(0.25, 0.6, 3);
+    const arrowHead = new THREE.Mesh(arrowHeadGeom, arrowStemMat);
+    arrowHead.position.y = 2.3;
+    arrowHead.rotation.y = Math.PI;
+    northGroup.add(arrowHead);
+
+    const canvas = document.createElement('canvas');
+    canvas.width = 64; canvas.height = 64;
+    const ctx = canvas.getContext('2d')!;
+    ctx.fillStyle = '#ff4444';
+    ctx.font = 'bold 48px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('N', 32, 32);
+    const nTexture = new THREE.CanvasTexture(canvas);
+    const nSpriteMat = new THREE.SpriteMaterial({ map: nTexture });
+    const nSprite = new THREE.Sprite(nSpriteMat);
+    nSprite.position.set(0.8, 2.5, 0);
+    nSprite.scale.set(1, 1, 1);
+    northGroup.add(nSprite);
+
+    northGroup.position.set(-20, 0, 0);
+    scene.add(northGroup);
 
     // Mirror
     const mirrorGroup = new THREE.Group();
@@ -72,7 +97,7 @@ export const SimulationCanvas: React.FC<SimulationCanvasProps> = ({ time }) => {
     support.position.y = -1;
     mirrorGroup.add(support);
 
-    const normalLineGeom = new THREE.BufferGeometry().setFromPoints([
+const normalLineGeom = new THREE.BufferGeometry().setFromPoints([
       new THREE.Vector3(0, 0.1, 0),
       new THREE.Vector3(0, 3, 0)
     ]);
@@ -86,59 +111,19 @@ export const SimulationCanvas: React.FC<SimulationCanvasProps> = ({ time }) => {
     normalLine.computeLineDistances();
     mirrorGroup.add(normalLine);
 
-    // Target (House)
-    const houseGroup = new THREE.Group();
-    const houseBody = new THREE.Mesh(
-      new THREE.BoxGeometry(2, 2, 2),
-      new THREE.MeshPhongMaterial({ color: 0x1d1d37, emissive: 0x72dcff, emissiveIntensity: 0.05 })
-    );
-    houseBody.position.y = 1;
-    const roof = new THREE.Mesh(
-      new THREE.ConeGeometry(1.6, 1.2, 4),
-      new THREE.MeshPhongMaterial({ color: 0x23233f })
-    );
-    roof.position.y = 2.6;
-    roof.rotation.y = Math.PI / 4;
-    houseGroup.add(houseBody, roof);
-    houseGroup.position.copy(targetPos);
-    scene.add(houseGroup);
-
-    // Sun
-    const sunGroup = new THREE.Group();
-    const sunSphere = new THREE.Mesh(
-      new THREE.SphereGeometry(0.8, 32, 32),
-      new THREE.MeshBasicMaterial({ color: 0xfff6f1 })
-    );
-    
-    // Glow
-    const canvas = document.createElement('canvas');
-    canvas.width = 64; canvas.height = 64;
-    const ctx = canvas.getContext('2d')!;
-    const gradient = ctx.createRadialGradient(32, 32, 0, 32, 32, 32);
-    gradient.addColorStop(0, 'rgba(255, 255, 255, 1)');
-    gradient.addColorStop(0.2, 'rgba(255, 240, 200, 0.8)');
-    gradient.addColorStop(1, 'rgba(255, 150, 0, 0)');
-    ctx.fillStyle = gradient;
-    ctx.fillRect(0, 0, 64, 64);
-    const glowTexture = new THREE.CanvasTexture(canvas);
-
-    const glowSprite = new THREE.Sprite(new THREE.SpriteMaterial({
-      map: glowTexture,
-      color: 0xff9d00,
-      transparent: true,
-      opacity: 0.7,
-      blending: THREE.AdditiveBlending
-    }));
-    glowSprite.scale.set(4, 4, 1);
-    sunSphere.add(glowSprite);
-    sunGroup.add(sunSphere);
-    scene.add(sunGroup);
-
-    // Beams
-    const createBeam = (color: number) => {
-      const mat = new THREE.LineBasicMaterial({ color, transparent: true, opacity: 0.4 });
-      const geom = new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(), new THREE.Vector3()]);
-      return new THREE.Line(geom, mat);
+    sceneRef.current = {
+      scene,
+      camera,
+      renderer,
+      sunGroup,
+      mirrorGroup,
+      mirrorMesh,
+      normalLine,
+      incomingBeam,
+      reflectedBeam,
+      incomingCore,
+      reflectedCore,
+      directionalLight
     };
     const incomingBeam = createBeam(0xffffff);
     const reflectedBeam = createBeam(0x72dcff);
@@ -203,7 +188,7 @@ export const SimulationCanvas: React.FC<SimulationCanvasProps> = ({ time }) => {
   useEffect(() => {
     if (!sceneRef.current) return;
 
-    const { sunGroup, mirrorMesh, incomingBeam, reflectedBeam, incomingCore, reflectedCore, directionalLight } = sceneRef.current;
+    const { sunGroup, mirrorMesh, normalLine, incomingBeam, reflectedBeam, incomingCore, reflectedCore, directionalLight } = sceneRef.current;
     
     const { position: sunPos } = calculateSunPosition(time);
     sunGroup.position.copy(sunPos);
@@ -211,6 +196,12 @@ export const SimulationCanvas: React.FC<SimulationCanvasProps> = ({ time }) => {
 
     const quaternion = calculateMirrorOrientation(sunPos, mirrorPos, targetPos);
     mirrorMesh.quaternion.copy(quaternion);
+
+    const inc = new THREE.Vector3().copy(mirrorPos).sub(sunPos).normalize();
+    const ref = new THREE.Vector3().copy(targetPos).sub(mirrorPos).normalize();
+    const bisector = new THREE.Vector3().addVectors(inc, ref).normalize();
+    const bisectorAngle = Math.atan2(bisector.x, bisector.z) + Math.PI;
+    normalLine.rotation.y = -bisectorAngle;
 
     incomingBeam.geometry.setFromPoints([sunPos, mirrorPos]);
     reflectedBeam.geometry.setFromPoints([mirrorPos, targetPos]);
