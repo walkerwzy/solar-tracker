@@ -73,7 +73,7 @@ export const SimulationCanvas: React.FC<SimulationCanvasProps> = ({ time }) => {
     nSprite.scale.set(1, 1, 1);
     northGroup.add(nSprite);
 
-    nortGroup.position.set(-20, 0, 0);
+    northGroup.position.set(-20, 0, 0);
     scene.add(northGroup);
 
     const sunGroup = new THREE.Group();
