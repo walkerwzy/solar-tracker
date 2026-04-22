@@ -43,34 +43,27 @@ export const SimulationCanvas: React.FC<SimulationCanvasProps> = ({ time }) => {
     const grid = new THREE.GridHelper(50, 50, 0x1d1d37, 0x111127);
     scene.add(grid);
 
-    // North arrow (pointing right towards house)
+    const arrowGeom = new THREE.ConeGeometry(0.15, 0.6, 3);
+    const arrowMesh = new THREE.Mesh(
+      arrowGeom,
+      new THREE.MeshBasicMaterial({ color: 0xff4444 })
+    );
+    arrowMesh.rotation.z = -Math.PI / 2;
     const northGroup = new THREE.Group();
-    const arrowStem = new THREE.Mesh(
-      new THREE.CylinderGeometry(0.08, 0.08, 2),
-      new THREE.MeshBasicMaterial({ color: 0xff4444 })
-    );
-    arrowStem.rotation.z = -Math.PI / 2;
-    arrowStem.position.set(1, 0, 0);
-    northGroup.add(arrowStem);
-    const arrowHead = new THREE.Mesh(
-      new THREE.ConeGeometry(0.25, 0.6, 3),
-      new THREE.MeshBasicMaterial({ color: 0xff4444 })
-    );
-    arrowHead.rotation.z = -Math.PI / 2;
-    arrowHead.position.set(2.3, 0, 0);
-    northGroup.add(arrowHead);
+    arrowMesh.position.set(0.1, 0.25, 0);
+    northGroup.add(arrowMesh);
     const nCanvas = document.createElement('canvas');
     nCanvas.width = 64; nCanvas.height = 64;
     const nCtx = nCanvas.getContext('2d')!;
     nCtx.fillStyle = '#ff4444';
-    nCtx.font = 'bold 48px sans-serif';
+    nCtx.font = 'bold 32px sans-serif';
     nCtx.textAlign = 'center';
     nCtx.textBaseline = 'middle';
     nCtx.fillText('N', 32, 32);
     const nSprite = new THREE.Sprite(new THREE.SpriteMaterial({ map: new THREE.CanvasTexture(nCanvas) }));
-    nSprite.position.set(3, 0.5, 0);
+    nSprite.position.set(0.6, 0.25, 0.01);
     northGroup.add(nSprite);
-    northGroup.position.set(-15, 0.5, -15);
+    northGroup.position.set(10, 1, 5);
     scene.add(northGroup);
 
     // Mirror
@@ -157,9 +150,8 @@ export const SimulationCanvas: React.FC<SimulationCanvasProps> = ({ time }) => {
     const reflectedCore = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.05, 1), coreBeamMat);
     scene.add(incomingCore, reflectedCore);
 
-    // Normal line (bisector)
     const normalLine = new THREE.Line(
-      new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(0, 0, 0), new THREE.Vector3(0, 4, 0)]),
+      new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(0, 0, 0), new THREE.Vector3(0, 6, 0)]),
       new THREE.LineDashedMaterial({ color: 0x00ff00, dashSize: 0.3, gapSize: 0.15 })
     );
     normalLine.computeLineDistances();
@@ -228,13 +220,8 @@ export const SimulationCanvas: React.FC<SimulationCanvasProps> = ({ time }) => {
     const quaternion = calculateMirrorOrientation(sunPos, mirrorPos, targetPos);
     mirrorMesh.quaternion.copy(quaternion);
 
-    // Update normal line to show bisector
     normalLine.position.copy(mirrorPos);
-    const inc = new THREE.Vector3().copy(mirrorPos).sub(sunPos).normalize();
-    const ref = new THREE.Vector3().copy(targetPos).sub(mirrorPos).normalize();
-    const bisector = new THREE.Vector3().addVectors(inc, ref).normalize();
-    const angle = Math.atan2(bisector.z, bisector.x);
-    normalLine.rotation.set(0, -angle, 0);
+    normalLine.quaternion.copy(quaternion);
 
     incomingBeam.geometry.setFromPoints([sunPos, mirrorPos]);
     reflectedBeam.geometry.setFromPoints([mirrorPos, targetPos]);
