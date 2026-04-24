@@ -14,8 +14,10 @@ interface TelemetryPanelProps {
   setVOffset: (v: number) => void;
   selectedDate: string;
   setSelectedDate: (d: string) => void;
-  lat: number;
-  lon: number;
+  lat: number | null;
+  lon: number | null;
+  setLat: (lat: number) => void;
+  setLon: (lon: number) => void;
   declination: number;
 }
 
@@ -33,8 +35,52 @@ export const TelemetryPanel: React.FC<TelemetryPanelProps> = ({
   setSelectedDate,
   lat,
   lon,
+  setLat,
+  setLon,
   declination
 }) => {
+  const [geoLoading, setGeoLoading] = React.useState(false);
+  const [geoError, setGeoError] = React.useState<string | null>(null);
+
+  const requestGeolocation = () => {
+    if (!navigator.geolocation) {
+      setGeoError('Geolocation is not supported by your browser');
+      return;
+    }
+
+    setGeoLoading(true);
+    setGeoError(null);
+
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        setLat(position.coords.latitude);
+        setLon(position.coords.longitude);
+        setGeoLoading(false);
+        setGeoError(null);
+      },
+      (error) => {
+        setGeoLoading(false);
+        switch (error.code) {
+          case error.PERMISSION_DENIED:
+            setGeoError('Location access denied. Please allow location access and try again.');
+            break;
+          case error.POSITION_UNAVAILABLE:
+            setGeoError('Location information unavailable.');
+            break;
+          case error.TIMEOUT:
+            setGeoError('Location request timed out.');
+            break;
+          default:
+            setGeoError('Failed to get location.');
+        }
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 10000,
+        maximumAge: 0
+      }
+    );
+  };
   const formatTime = (t: number) => {
     const hours = Math.floor(t);
     const mins = Math.floor((t % 1) * 60);
@@ -91,18 +137,36 @@ export const TelemetryPanel: React.FC<TelemetryPanelProps> = ({
               <MapPin className="text-primary w-4 h-4" />
               <span className="text-[10px] text-on-surface-dim uppercase tracking-widest">Node Geolocation</span>
             </div>
-            <button className="text-on-surface-dim hover:text-primary transition-colors" title="Request Location">
-              <LocateFixed className="w-4 h-4" />
+            <button
+              onClick={requestGeolocation}
+              disabled={geoLoading}
+              className="text-on-surface-dim hover:text-primary transition-colors disabled:opacity-50"
+              title="Request Location"
+            >
+              {geoLoading ? (
+                <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
+              ) : (
+                <LocateFixed className="w-4 h-4" />
+              )}
             </button>
           </div>
+          {geoError && (
+            <div className="mb-3 text-[11px] text-red-400 bg-red-500/10 p-2 rounded-lg">
+              {geoError}
+            </div>
+          )}
           <div className="grid grid-cols-2 gap-2 text-sm">
             <div className="flex flex-col">
               <span className="text-[10px] text-on-surface-dim">LATITUDE</span>
-              <span className="font-mono text-on-surface">{lat.toFixed(2)}° {lat >= 0 ? 'N' : 'S'}</span>
+              <span className="font-mono text-on-surface">
+                {lat !== null ? `${lat.toFixed(2)}° ${lat >= 0 ? 'N' : 'S'}` : '—'}
+              </span>
             </div>
             <div className="flex flex-col">
               <span className="text-[10px] text-on-surface-dim">LONGITUDE</span>
-              <span className="font-mono text-on-surface">{lon.toFixed(2)}° {lon >= 0 ? 'E' : 'W'}</span>
+              <span className="font-mono text-on-surface">
+                {lon !== null ? `${lon.toFixed(2)}° ${lon >= 0 ? 'E' : 'W'}` : '—'}
+              </span>
             </div>
           </div>
         </div>

@@ -18,8 +18,25 @@ export default function App() {
   
   const [sunriseTime, setSunriseTime] = useState(6);
   const [sunsetTime, setSunsetTime] = useState(20);
-  const [lat] = useState(31.23);
-  const [lon] = useState(121.47);
+  const [lat, setLat] = useState<number | null>(null);
+  const [lon, setLon] = useState<number | null>(null);
+
+  useEffect(() => {
+    if (!navigator.geolocation) return;
+
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        setLat(position.coords.latitude);
+        setLon(position.coords.longitude);
+      },
+      () => {},
+      {
+        enableHighAccuracy: true,
+        timeout: 10000,
+        maximumAge: 0
+      }
+    );
+  }, []);
 
   const declination = useMemo(() => {
     const date = new Date(selectedDate);
@@ -28,10 +45,11 @@ export default function App() {
   }, [selectedDate]);
 
   useEffect(() => {
+    if (lat === null || lon === null) return;
     const [year, month, day] = selectedDate.split('-').map(Number);
     const date = new Date(year, month - 1, day, 12);
     const times = getSunTimes(date, lat, lon);
-    
+
     if (times.sunrise) {
       const [sh, sm] = times.sunrise.split(':').map(Number);
       const dawnHours = (sh * 60 + sm - 30) / 60;
@@ -45,6 +63,9 @@ export default function App() {
   }, [selectedDate, lat, lon]);
 
   const solarData = useMemo(() => {
+    if (lat === null || lon === null) {
+      return { azimuth: 0, altitude: 0, motorH: 0, motorV: 0 };
+    }
     return getSolarData(time, selectedDate, lat, lon, 25.0, 10.0);
   }, [time, selectedDate, lat, lon]);
 
@@ -123,7 +144,7 @@ export default function App() {
 
       {/* Right Side Data Panel */}
       <div className="w-full lg:w-[400px] lg:min-w-[400px] order-3 lg:order-3 no-scrollbar">
-<TelemetryPanel
+      <TelemetryPanel
           time={time}
           azimuth={actualSunData.azimuth}
           altitude={actualSunData.altitude}
@@ -137,6 +158,8 @@ export default function App() {
           setSelectedDate={setSelectedDate}
           lat={lat}
           lon={lon}
+          setLat={setLat}
+          setLon={setLon}
           declination={declination}
         />
       </div>
