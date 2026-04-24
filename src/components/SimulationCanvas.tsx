@@ -255,7 +255,7 @@ export const SimulationCanvas: React.FC<SimulationCanvasProps> = ({ time, lat, l
       }
 
       try {
-        const res = await fetch('/buildings.json');
+        const res = await fetch('/builds.json');
         const buildings: Building[] = await res.json();
         buildingsDataRef.current = buildings;
         renderBuildings(buildings, scene, buildingsRef.current);
