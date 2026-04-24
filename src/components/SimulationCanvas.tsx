@@ -1,12 +1,15 @@
 import React, { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 import { calculateSunPosition, calculateMirrorOrientation } from '@/lib/solarCalculations';
+import { latLonToSceneCoords, Building } from '@/lib/solar';
 
 interface SimulationCanvasProps {
   time: number;
+  lat: number | null;
+  lon: number | null;
 }
 
-export const SimulationCanvas: React.FC<SimulationCanvasProps> = ({ time }) => {
+export const SimulationCanvas: React.FC<SimulationCanvasProps> = ({ time, lat, lon }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const sceneRef = useRef<{
     scene: THREE.Scene;
@@ -21,6 +24,8 @@ export const SimulationCanvas: React.FC<SimulationCanvasProps> = ({ time }) => {
     reflectedCore: THREE.Mesh;
     directionalLight: THREE.DirectionalLight;
   } | null>(null);
+  const buildingsRef = useRef<THREE.Group[]>([]);
+  const buildingsDataRef = useRef<Building[] | null>(null);
 
   const targetPos = new THREE.Vector3(8, 0, 0);
   const mirrorPos = new THREE.Vector3(-8, 0, 0);
@@ -238,5 +243,61 @@ export const SimulationCanvas: React.FC<SimulationCanvasProps> = ({ time }) => {
     updateBeamTube(reflectedCore, mirrorPos, targetPos);
   }, [time]);
 
+  useEffect(() => {
+    if (!sceneRef.current || lat === null || lon === null) return;
+    const { scene } = sceneRef.current;
+
+    const loadBuildings = async () => {
+      if (buildingsDataRef.current) {
+        renderBuildings(buildingsDataRef.current, lat, lon, scene, buildingsRef.current);
+        return;
+      }
+
+      try {
+        const res = await fetch('/buildings.json');
+        const buildings: Building[] = await res.json();
+        buildingsDataRef.current = buildings;
+        renderBuildings(buildings, lat, lon, scene, buildingsRef.current);
+      } catch (e) {
+        console.error('Failed to load buildings.json', e);
+      }
+    };
+
+    loadBuildings();
+  }, [lat, lon]);
+
   return <div ref={containerRef} className="w-full h-full" />;
 };
+
+function renderBuildings(buildings: Building[], centerLat: number, centerLon: number, scene: THREE.Scene, buildingsRef: THREE.Group[]) {
+  buildingsRef.forEach(group => scene.remove(group));
+  buildingsRef.length = 0;
+
+  buildings.forEach(building => {
+    const sum = { x: 0, z: 0 };
+    building.vertices.forEach(v => {
+      const pos = latLonToSceneCoords(v.lat, v.lon, centerLat, centerLon, 0.01);
+      sum.x += pos.x;
+      sum.z += pos.z;
+    });
+    const centerX = sum.x / building.vertices.length;
+    const centerZ = sum.z / building.vertices.length;
+
+    const xs = building.vertices.map(v => latLonToSceneCoords(v.lat, v.lon, centerLat, centerLon, 0.01).x);
+    const zs = building.vertices.map(v => latLonToSceneCoords(v.lat, v.lon, centerLat, centerLon, 0.01).z);
+    const width = Math.max(...xs) - Math.min(...xs);
+    const depth = Math.max(...zs) - Math.min(...zs);
+
+    const geometry = new THREE.BoxGeometry(Math.max(width, 0.5), building.height * 0.01, Math.max(depth, 0.5));
+    const material = new THREE.MeshPhongMaterial({ color: 0x4a90e2, transparent: true, opacity: 0.8 });
+    const mesh = new THREE.Mesh(geometry, material);
+    mesh.position.set(centerX, (building.height * 0.01) / 2, centerZ);
+    mesh.castShadow = true;
+    mesh.receiveShadow = true;
+
+    const group = new THREE.Group();
+    group.add(mesh);
+    scene.add(group);
+    buildingsRef.push(group);
+  });
+}

@@ -1,5 +1,28 @@
 import * as SunCalc from '@noim/suncalc3';
 
+export interface Building {
+  name: string;
+  vertices: { lat: number; lon: number }[];
+  height: number;
+}
+
+/**
+ * Convert lat/lon to scene coordinates relative to a center point.
+ * Returns meters by default. Use scale factor to adapt to scene units.
+ */
+export function latLonToSceneCoords(
+  vertexLat: number,
+  vertexLon: number,
+  centerLat: number,
+  centerLon: number,
+  scale: number = 1.0
+): { x: number; z: number } {
+  const latRad = (centerLat * Math.PI) / 180;
+  const deltaX = (vertexLon - centerLon) * 111320 * Math.cos(latRad) * scale;
+  const deltaZ = (vertexLat - centerLat) * 110574 * scale;
+  return { x: deltaX, z: deltaZ };
+}
+
 export interface SunPosition {
   altitude: number;
   azimuth: number;

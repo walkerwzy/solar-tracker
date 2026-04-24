@@ -107,7 +107,7 @@ export default function App() {
           </div>
         </div>
 
-        <SimulationCanvas time={time} />
+        <SimulationCanvas time={time} lat={lat} lon={lon} />
 
         <div className="hidden lg:block">
           <TimeControls
