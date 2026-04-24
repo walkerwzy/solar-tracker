@@ -288,7 +288,7 @@ function renderBuildings(buildings: Building[], scene: THREE.Scene, buildingsRef
     const depth = Math.max(...relPositions.map(p => p.z)) - Math.min(...relPositions.map(p => p.z));
     const centerX = relPositions.reduce((s, p) => s + p.x, 0) / relPositions.length;
 
-    const geometry = new THREE.BoxGeometry(Math.max(width, 0.3), building.height * 0.01, Math.max(depth, 0.3));
+    const geometry = new THREE.BoxGeometry(Math.max(width, 2.5), building.height * 0.01, Math.max(depth, 2.5));
     const material = new THREE.MeshPhongMaterial({ color: 0x4a90e2, transparent: true, opacity: 0.8 });
     const mesh = new THREE.Mesh(geometry, material);
     mesh.position.set(centerX, (building.height * 0.01) / 2, baseZ - i * zStep);
