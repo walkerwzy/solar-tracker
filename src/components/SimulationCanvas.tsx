@@ -250,7 +250,7 @@ export const SimulationCanvas: React.FC<SimulationCanvasProps> = ({ time, lat, l
 
     const loadBuildings = async () => {
       if (buildingsDataRef.current) {
-        renderBuildings(buildingsDataRef.current, lat, lon, scene, buildingsRef.current);
+        renderBuildings(buildingsDataRef.current, scene, buildingsRef.current);
         return;
       }
 
@@ -258,7 +258,7 @@ export const SimulationCanvas: React.FC<SimulationCanvasProps> = ({ time, lat, l
         const res = await fetch('/buildings.json');
         const buildings: Building[] = await res.json();
         buildingsDataRef.current = buildings;
-        renderBuildings(buildings, lat, lon, scene, buildingsRef.current);
+        renderBuildings(buildings, scene, buildingsRef.current);
       } catch (e) {
         console.error('Failed to load buildings.json', e);
       }
@@ -270,27 +270,28 @@ export const SimulationCanvas: React.FC<SimulationCanvasProps> = ({ time, lat, l
   return <div ref={containerRef} className="w-full h-full" />;
 };
 
-function renderBuildings(buildings: Building[], centerLat: number, centerLon: number, scene: THREE.Scene, buildingsRef: THREE.Group[]) {
+function renderBuildings(buildings: Building[], scene: THREE.Scene, buildingsRef: THREE.Group[]) {
   buildingsRef.forEach(group => scene.remove(group));
   buildingsRef.length = 0;
 
-  const sceneZMin = -20;
-  const sceneZMax = -5;
+  const baseZ = -8;
+  const zStep = 4;
 
-  buildings.forEach(building => {
-    const positions = building.vertices.map(v => latLonToSceneCoords(v.lat, v.lon, centerLat, centerLon, 0.01));
-    const centerX = positions.reduce((s, p) => s + p.x, 0) / positions.length;
-    const centerZ = positions.reduce((s, p) => s + p.z, 0) / positions.length;
+  buildings.forEach((building, i) => {
+    const refLat = building.vertices[0].lat;
+    const refLon = building.vertices[0].lon;
 
-    const clampedZ = Math.max(sceneZMin, Math.min(sceneZMax, centerZ));
+    const relPositions = building.vertices.map(v =>
+      latLonToSceneCoords(v.lat, v.lon, refLat, refLon, 0.01)
+    );
+    const width = Math.max(...relPositions.map(p => p.x)) - Math.min(...relPositions.map(p => p.x));
+    const depth = Math.max(...relPositions.map(p => p.z)) - Math.min(...relPositions.map(p => p.z));
+    const centerX = relPositions.reduce((s, p) => s + p.x, 0) / relPositions.length;
 
-    const width = Math.max(...positions.map(p => p.x)) - Math.min(...positions.map(p => p.x));
-    const depth = Math.max(...positions.map(p => p.z)) - Math.min(...positions.map(p => p.z));
-
-    const geometry = new THREE.BoxGeometry(Math.max(width, 0.5), building.height * 0.01, Math.max(depth, 0.5));
+    const geometry = new THREE.BoxGeometry(Math.max(width, 0.3), building.height * 0.01, Math.max(depth, 0.3));
     const material = new THREE.MeshPhongMaterial({ color: 0x4a90e2, transparent: true, opacity: 0.8 });
     const mesh = new THREE.Mesh(geometry, material);
-    mesh.position.set(centerX, (building.height * 0.01) / 2, clampedZ);
+    mesh.position.set(centerX, (building.height * 0.01) / 2, baseZ - i * zStep);
     mesh.castShadow = true;
     mesh.receiveShadow = true;
 
