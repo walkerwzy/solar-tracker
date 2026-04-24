@@ -92,18 +92,19 @@ export const SimulationCanvas: React.FC<SimulationCanvasProps> = ({ time, lat, l
     support.position.y = -1;
     mirrorGroup.add(support);
 
-    // Target (House)
     const houseGroup = new THREE.Group();
+    const houseSize = 0.1;
+    const houseHeight = 0.1;
     const houseBody = new THREE.Mesh(
-      new THREE.BoxGeometry(2, 2, 2),
+      new THREE.BoxGeometry(houseSize, houseHeight, houseSize),
       new THREE.MeshPhongMaterial({ color: 0x1d1d37, emissive: 0x72dcff, emissiveIntensity: 0.05 })
     );
-    houseBody.position.y = 1;
+    houseBody.position.y = houseHeight / 2;
     const roof = new THREE.Mesh(
-      new THREE.ConeGeometry(1.6, 1.2, 4),
+      new THREE.ConeGeometry(houseSize * 0.8, houseSize * 0.6, 4),
       new THREE.MeshPhongMaterial({ color: 0x23233f })
     );
-    roof.position.y = 2.6;
+    roof.position.y = houseHeight + houseSize * 0.3;
     roof.rotation.y = Math.PI / 4;
     houseGroup.add(houseBody, roof);
     houseGroup.position.copy(targetPos);
@@ -273,25 +274,23 @@ function renderBuildings(buildings: Building[], centerLat: number, centerLon: nu
   buildingsRef.forEach(group => scene.remove(group));
   buildingsRef.length = 0;
 
-  buildings.forEach(building => {
-    const sum = { x: 0, z: 0 };
-    building.vertices.forEach(v => {
-      const pos = latLonToSceneCoords(v.lat, v.lon, centerLat, centerLon, 0.01);
-      sum.x += pos.x;
-      sum.z += pos.z;
-    });
-    const centerX = sum.x / building.vertices.length;
-    const centerZ = sum.z / building.vertices.length;
+  const sceneZMin = -20;
+  const sceneZMax = -5;
 
-    const xs = building.vertices.map(v => latLonToSceneCoords(v.lat, v.lon, centerLat, centerLon, 0.01).x);
-    const zs = building.vertices.map(v => latLonToSceneCoords(v.lat, v.lon, centerLat, centerLon, 0.01).z);
-    const width = Math.max(...xs) - Math.min(...xs);
-    const depth = Math.max(...zs) - Math.min(...zs);
+  buildings.forEach(building => {
+    const positions = building.vertices.map(v => latLonToSceneCoords(v.lat, v.lon, centerLat, centerLon, 0.01));
+    const centerX = positions.reduce((s, p) => s + p.x, 0) / positions.length;
+    const centerZ = positions.reduce((s, p) => s + p.z, 0) / positions.length;
+
+    const clampedZ = Math.max(sceneZMin, Math.min(sceneZMax, centerZ));
+
+    const width = Math.max(...positions.map(p => p.x)) - Math.min(...positions.map(p => p.x));
+    const depth = Math.max(...positions.map(p => p.z)) - Math.min(...positions.map(p => p.z));
 
     const geometry = new THREE.BoxGeometry(Math.max(width, 0.5), building.height * 0.01, Math.max(depth, 0.5));
     const material = new THREE.MeshPhongMaterial({ color: 0x4a90e2, transparent: true, opacity: 0.8 });
     const mesh = new THREE.Mesh(geometry, material);
-    mesh.position.set(centerX, (building.height * 0.01) / 2, centerZ);
+    mesh.position.set(centerX, (building.height * 0.01) / 2, clampedZ);
     mesh.castShadow = true;
     mesh.receiveShadow = true;
 
