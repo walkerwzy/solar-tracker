@@ -93,8 +93,8 @@ export const SimulationCanvas: React.FC<SimulationCanvasProps> = ({ time, lat, l
     mirrorGroup.add(support);
 
     const houseGroup = new THREE.Group();
-    const houseSize = 0.1;
-    const houseHeight = 0.1;
+    const houseSize = 2.0;
+    const houseHeight = 2.0;
     const houseBody = new THREE.Mesh(
       new THREE.BoxGeometry(houseSize, houseHeight, houseSize),
       new THREE.MeshPhongMaterial({ color: 0x1d1d37, emissive: 0x72dcff, emissiveIntensity: 0.05 })
