@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import * as THREE from 'three';
-import { calculateSunPosition, calculateMirrorOrientation } from '@/lib/solarCalculations';
+import { calculateSunPosition, calculateMirrorOrientation, getSunDirection } from '@/lib/solarCalculations';
 import { latLonToSceneCoords, Building } from '@/lib/solar';
 
 interface SimulationCanvasProps {
@@ -236,9 +236,12 @@ export const SimulationCanvas: React.FC<SimulationCanvasProps> = ({ time, lat, l
 
     const { sunGroup, mirrorMesh, normalLine, incomingBeam, reflectedBeam, incomingCore, reflectedCore, directionalLight } = sceneRef.current;
     
-    const { position: sunPos } = calculateSunPosition(time);
+    const { position: sunPos, azimuth, altitude } = calculateSunPosition(time);
     sunGroup.position.copy(sunPos);
-    directionalLight.position.copy(sunPos);
+    const sunDir = getSunDirection(azimuth, altitude);
+    directionalLight.position.copy(sunDir.multiplyScalar(1000));
+    directionalLight.target.position.set(0, 0, 0);
+    sceneRef.current.scene.add(directionalLight.target);
 
     const quaternion = calculateMirrorOrientation(sunPos, mirrorPos, targetPos);
     mirrorMesh.quaternion.copy(quaternion);

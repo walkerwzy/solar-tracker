@@ -25,6 +25,17 @@ export function calculateSunPosition(time: number) {
   };
 }
 
+export function getSunDirection(azimuth: number, altitude: number): THREE.Vector3 {
+  const azRad = (azimuth * Math.PI) / 180;
+  const altRad = (altitude * Math.PI) / 180;
+
+  const x = Math.cos(altRad) * Math.sin(azRad);
+  const y = Math.sin(altRad);
+  const z = Math.cos(altRad) * Math.cos(azRad);
+
+  return new THREE.Vector3(x, y, z).normalize();
+}
+
 /**
  * Calculates the mirror orientation to reflect sun light to a target.
  * @param sunPos Current sun position
