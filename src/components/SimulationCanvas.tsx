@@ -48,6 +48,14 @@ export const SimulationCanvas: React.FC<SimulationCanvasProps> = ({ time, lat, l
     const grid = new THREE.GridHelper(50, 50, 0x1d1d37, 0x111127);
     scene.add(grid);
 
+    const groundGeom = new THREE.PlaneGeometry(100, 100);
+    const groundMat = new THREE.MeshPhongMaterial({ color: 0x060614, transparent: true, opacity: 0.5 });
+    const ground = new THREE.Mesh(groundGeom, groundMat);
+    ground.rotation.x = -Math.PI / 2;
+    ground.position.y = 0;
+    ground.receiveShadow = true;
+    scene.add(ground);
+
     const arrowGeom = new THREE.ConeGeometry(0.15, 0.6, 3);
     const arrowMesh = new THREE.Mesh(
       arrowGeom,
@@ -167,6 +175,15 @@ export const SimulationCanvas: React.FC<SimulationCanvasProps> = ({ time, lat, l
     const ambientLight = new THREE.AmbientLight(0x404040, 1.5);
     scene.add(ambientLight);
     const directionalLight = new THREE.DirectionalLight(0xffffff, 2);
+    directionalLight.castShadow = true;
+    directionalLight.shadow.mapSize.width = 2048;
+    directionalLight.shadow.mapSize.height = 2048;
+    directionalLight.shadow.camera.near = 0.5;
+    directionalLight.shadow.camera.far = 50;
+    directionalLight.shadow.camera.left = -20;
+    directionalLight.shadow.camera.right = 20;
+    directionalLight.shadow.camera.top = 20;
+    directionalLight.shadow.camera.bottom = -20;
     scene.add(directionalLight);
 
     sceneRef.current = {
@@ -288,10 +305,10 @@ function renderBuildings(buildings: Building[], scene: THREE.Scene, buildingsRef
     const depth = Math.max(...relPositions.map(p => p.z)) - Math.min(...relPositions.map(p => p.z));
     const centerX = relPositions.reduce((s, p) => s + p.x, 0) / relPositions.length;
 
-    const geometry = new THREE.BoxGeometry(Math.max(width, 2.5), building.height * 0.01, Math.max(depth, 2.5));
+    const geometry = new THREE.BoxGeometry(Math.max(width, 2.5), building.height * 0.05, Math.max(depth, 2.5));
     const material = new THREE.MeshPhongMaterial({ color: 0x4a90e2, transparent: true, opacity: 0.8 });
     const mesh = new THREE.Mesh(geometry, material);
-    mesh.position.set(centerX, (building.height * 0.01) / 2, baseZ - i * zStep);
+    mesh.position.set(centerX, (building.height * 0.05) / 2, baseZ - i * zStep);
     mesh.castShadow = true;
     mesh.receiveShadow = true;
 
